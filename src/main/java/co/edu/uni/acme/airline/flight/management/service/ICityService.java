@@ -11,4 +11,8 @@ public interface ICityService {
     List<CityEntity> getAllCities();
 
     Page<CityEntity> getCitiesByFilters(String code, String name, Pageable pageable);
+
+    List<CityEntity> getCitiesWithAvailableFlights();
+
+
 }

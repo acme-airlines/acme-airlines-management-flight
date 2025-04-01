@@ -27,4 +27,10 @@ public class CityServiceImpl implements ICityService {
     public Page<CityEntity> getCitiesByFilters(String code, String name, Pageable pageable) {
         return cityRepository.findByCodeAndName(code, name, pageable);
     }
+
+    @Override
+    public List<CityEntity> getCitiesWithAvailableFlights() {
+        return cityRepository.findCitiesWithAvailableFlights();
+    }
+
 }

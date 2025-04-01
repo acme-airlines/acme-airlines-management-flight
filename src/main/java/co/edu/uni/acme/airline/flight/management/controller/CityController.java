@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cities")
+@RequestMapping("/public/cities")
 @RequiredArgsConstructor
 public class CityController {
 
@@ -24,6 +24,12 @@ public class CityController {
     public ResponseEntity<List<CityEntity>> getAllCities() {
         return ResponseEntity.ok(cityService.getAllCities());
     }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<CityEntity>> getCitiesWithAvailableFlights() {
+        return ResponseEntity.ok(cityService.getCitiesWithAvailableFlights());
+    }
+
 
     @GetMapping("/filter")
     public ResponseEntity<Page<CityEntity>> filterCities(

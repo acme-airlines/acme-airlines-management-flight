@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CityRepository extends JpaRepository<CityEntity, String> {
 
@@ -18,6 +20,14 @@ public interface CityRepository extends JpaRepository<CityEntity, String> {
             @Param("code") String code,
             @Param("name") String name,
             Pageable pageable);
+
+    @Query("SELECT DISTINCT c FROM CityEntity c " +
+            "WHERE c.codeCity IN (" +
+            "SELECT f.origin FROM FlightEntity f " +
+            "UNION " +
+            "SELECT f.destination FROM FlightEntity f)")
+    List<CityEntity> findCitiesWithAvailableFlights();
+
 
 
 }

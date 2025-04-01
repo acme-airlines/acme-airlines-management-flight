@@ -10,17 +10,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/flights")
+@RequestMapping("/public/flights")
 @RequiredArgsConstructor
 public class FlightController {
 
     private final IFlightService flightService;
 
     @PostMapping("/filter")
-    public ResponseEntity<List<FlightEntity>> getAvailableFlights(@RequestBody FlightFilterRequestDTO filters) {
+    public ResponseEntity<?> getAvailableFlights(@RequestBody FlightFilterRequestDTO filters) {
+        if (filters.getStartDate() != null && filters.getStartDate().isBefore(LocalDate.now())) {
+            return ResponseEntity.badRequest().body("La fecha de inicio no puede ser anterior a la fecha actual.");
+        }
+
         List<FlightEntity> flights = flightService.getAvailableFlights(
                 filters.getStartDate(),
                 filters.getEndDate(),
@@ -28,8 +33,12 @@ public class FlightController {
                 filters.getDestination()
         );
 
-        return ResponseEntity.ok(flights);
+        if (flights.isEmpty()) {
+            return ResponseEntity.ok().body("No hay vuelos disponibles para los criterios seleccionados.");
+        }
 
+        return ResponseEntity.ok(flights);
     }
+
 
 }
