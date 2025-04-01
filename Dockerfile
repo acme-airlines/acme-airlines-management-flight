@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copia el archivo JAR generado al contenedor
-COPY target/flight.management--0.0.1-SNAPSHOT.jar flight.management-ms.jar
+COPY target/flight.management-0.0.1-SNAPSHOT.jar flight.management-ms.jar
 
 EXPOSE 8002
 
