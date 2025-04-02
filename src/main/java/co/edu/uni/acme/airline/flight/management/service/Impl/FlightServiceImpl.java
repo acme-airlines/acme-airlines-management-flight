@@ -17,7 +17,7 @@ public class FlightServiceImpl implements IFlightService {
 
     @Override
     public List<FlightEntity> getAvailableFlights(LocalDate startDate, LocalDate endDate, String origin, String destination) {
-        return flightRepository.findByFlightDateBetweenAndOriginIgnoreCaseAndDestinationIgnoreCase(startDate, endDate, origin, destination);
+        return flightRepository.findFlightsDynamic(startDate, endDate, origin == null, origin, destination == null,destination);
     }
 
 }
