@@ -5,6 +5,7 @@ import org.apache.catalina.security.SecurityConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -15,7 +16,9 @@ import org.springframework.context.annotation.Import;
 public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		new SpringApplicationBuilder(Application.class)
+				.properties("spring.config.name=application")
+				.properties("spring.config.location=classpath:/application.properties") // <-- Aquí forzas que use solo ese
+				.run(args);
 	}
-
 }
