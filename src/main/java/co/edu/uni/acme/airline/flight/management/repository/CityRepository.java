@@ -21,11 +21,15 @@ public interface CityRepository extends JpaRepository<CityEntity, String> {
             @Param("name") String name,
             Pageable pageable);
 
-    @Query("SELECT DISTINCT c FROM CityEntity c " +
-            "WHERE c.codeCity IN (" +
-            "SELECT f.origin FROM FlightEntity f " +
-            "UNION " +
-            "SELECT f.destination FROM FlightEntity f)")
+    @Query("""
+      SELECT DISTINCT c
+        FROM CityEntity c
+       WHERE c.codeCity IN (
+         SELECT fc.city.codeCity
+           FROM FlightCityEntity fc
+          WHERE fc.numberFlight IN ('1','2')
+       )
+    """)
     List<CityEntity> findCitiesWithAvailableFlights();
 
 

@@ -12,19 +12,26 @@ import java.util.List;
 @Repository
 public interface FlightRepository extends JpaRepository<FlightEntity, Long> {
 
-    @Query("SELECT f FROM FlightEntity f " +
-            "WHERE (f.flightDate >= :startDate) " +
-            "AND ( f.flightDate <= :endDate) " +
-            "AND (:ignoreOrigin = true OR LOWER(f.origin) = LOWER(:origin)) " +
-            "AND (:ignoreDestination = true OR LOWER(f.destination) = LOWER(:destination))")
+    @Query("""
+      SELECT DISTINCT f
+        FROM FlightEntity f,
+             FlightCityEntity fcOrigin,
+             FlightCityEntity fcDest
+       WHERE f.flightDate BETWEEN
+               COALESCE(:startDate, f.flightDate)
+           AND COALESCE(:endDate,   f.flightDate)
+           AND  fcOrigin.numberFlight   = '1'
+           AND fcDest.numberFlight = '4'
+         AND LOWER(fcOrigin.city.codeCity)  = LOWER(:origin)
+         AND LOWER(fcDest.city.codeCity)    = LOWER(:destination)
+    """)
     List<FlightEntity> findFlightsDynamic(
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate,
-            @Param("ignoreOrigin") boolean ignoreOrigin,
-            @Param("origin") String origin,
-            @Param("ignoreDestination") boolean ignoreDestination,
-            @Param("destination") String destination
+            @Param("startDate")   LocalDate startDate,
+            @Param("endDate")     LocalDate endDate,
+            @Param("origin")      String    origin,
+            @Param("destination") String    destination
     );
+
 
 
 

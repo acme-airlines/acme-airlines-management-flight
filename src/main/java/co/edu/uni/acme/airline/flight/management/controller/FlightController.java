@@ -1,7 +1,9 @@
 package co.edu.uni.acme.airline.flight.management.controller;
 
+import co.edu.uni.acme.aerolinea.commons.dto.FlightDTO;
 import co.edu.uni.acme.aerolinea.commons.entity.FlightEntity;
 import co.edu.uni.acme.airline.flight.management.dto.FlightFilterRequestDTO;
+import co.edu.uni.acme.airline.flight.management.dto.FlightResponseDto;
 import co.edu.uni.acme.airline.flight.management.service.IFlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,23 +23,10 @@ public class FlightController {
     private final IFlightService flightService;
 
     @PostMapping("/filter")
-    public ResponseEntity<?> getAvailableFlights(@RequestBody FlightFilterRequestDTO filters) {
-        if (filters.getStartDate() != null && filters.getStartDate().isBefore(LocalDate.now())) {
-            return ResponseEntity.badRequest().body("La fecha de inicio no puede ser anterior a la fecha actual.");
-        }
-
-        List<FlightEntity> flights = flightService.getAvailableFlights(
-                filters.getStartDate(),
-                filters.getEndDate(),
-                filters.getOrigin(),
-                filters.getDestination()
-        );
-
-        if (flights.isEmpty()) {
-            return ResponseEntity.ok().body("No hay vuelos disponibles para los criterios seleccionados.");
-        }
-
-        return ResponseEntity.ok(flights);
+    public ResponseEntity<List<FlightResponseDto>> getAvailableFlights(@RequestBody FlightFilterRequestDTO filters) throws Exception {
+        return ResponseEntity.ok(flightService.getAvailableFlights(
+                filters
+        ));
     }
 
 
