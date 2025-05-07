@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/public/flights")
+@RequestMapping("/api/v1/flights")
 @RequiredArgsConstructor
 public class FlightController {
 
