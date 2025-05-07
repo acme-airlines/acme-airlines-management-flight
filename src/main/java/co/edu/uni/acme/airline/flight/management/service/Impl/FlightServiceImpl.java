@@ -54,6 +54,7 @@ public class FlightServiceImpl implements IFlightService {
             flightResponse.setValueFlight("0");
             flightResponse.setStartTime(String.valueOf(flight.getFlightStartTime()));
             flightResponse.setEndTime(String.valueOf(flight.getFlightEndTime()));
+            flightResponse.setCodigoVuelo(flight.getCodeFlight());
             responseDtos.add(flightResponse);
         }
 

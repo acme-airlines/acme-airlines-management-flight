@@ -1,7 +1,6 @@
 package co.edu.uni.acme.airline.flight.management.util.mapper;
 
 import co.edu.uni.acme.aerolinea.commons.dto.FlightDTO;
-import co.edu.uni.acme.aerolinea.commons.dto.PassengerDTO;
 import co.edu.uni.acme.aerolinea.commons.entity.FlightEntity;
 import co.edu.uni.acme.aerolinea.commons.entity.PassengerEntity;
 import org.mapstruct.Mapper;

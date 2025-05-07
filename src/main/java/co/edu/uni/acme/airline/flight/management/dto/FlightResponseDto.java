@@ -16,4 +16,6 @@ public class FlightResponseDto {
 
     private String valueFlight;
 
+    private String codigoVuelo;
+
 }
