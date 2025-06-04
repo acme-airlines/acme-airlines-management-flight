@@ -14,4 +14,6 @@ public class PaymentRequestDto {
     private Integer expiryYear;
     private String cvv;
     private Double amount;
+    private String codeFlight;
+    private String codePassenger;
 }

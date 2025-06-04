@@ -1,10 +1,10 @@
 package co.edu.uni.acme.airline.flight.management.service.Impl;
 
-import co.edu.uni.acme.aerolinea.commons.entity.PaymentCardEntity;
-import co.edu.uni.acme.aerolinea.commons.entity.PaymentEntity;
+import co.edu.uni.acme.aerolinea.commons.entity.*;
 import co.edu.uni.acme.airline.flight.management.dto.PaymentRequestDto;
 import co.edu.uni.acme.airline.flight.management.dto.PaymentResponseDto;
 import co.edu.uni.acme.airline.flight.management.repository.PaymentCardRepository;
+import co.edu.uni.acme.airline.flight.management.repository.PaymentFlightUserRepository;
 import co.edu.uni.acme.airline.flight.management.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,7 @@ public class PaymentService {
 
     private final PaymentCardRepository cardRepo;
     private final PaymentRepository paymentRepo;
+    private final PaymentFlightUserRepository paymentFlightUserRepository;
 
     /**
      * 1) Busca la tarjeta por número.
@@ -60,6 +61,19 @@ public class PaymentService {
             return new PaymentResponseDto(null, "DECLINED", "Saldo insuficiente en la tarjeta");
         }
 
+        // --- 5) Crear registro en payment_flight_user ---
+        // Generamos un código único para payment_flight_user
+        String codigoPfUser = "PFU" + UUID.randomUUID().toString().substring(0, 8);
+        FlightEntity flight = new FlightEntity();
+        flight.setCodeFlight(request.getCodeFlight());
+        PassengerEntity passenger = new PassengerEntity();
+        passenger.setCode(request.getCodePassenger());
+        PaymentFlightUserEntity pfUser = new PaymentFlightUserEntity();
+        pfUser.setCodeUserFlightUser(codigoPfUser);
+        pfUser.setCodeFlightFk(flight);        // requerido en DTO
+        pfUser.setCodePassengerFk(passenger);  // requerido en DTO
+        pfUser = paymentFlightUserRepository.save(pfUser);
+
         // --- 5) Descontar monto y guardar tarjeta ---
         Double nuevoSaldo = disponible.subtract(montoSolicitado).doubleValue();
         tarjeta.setAvailableAmount(nuevoSaldo);
@@ -71,6 +85,7 @@ public class PaymentService {
         pago.setCodePayment(nuevoCodigoPago);
         pago.setDateCreated(LocalDate.now());
         pago.setDatePayment(LocalDate.now());
+        pago.setCodePaymentFlightPassengerFk(pfUser);
         pago.setTimePayment(LocalTime.now());
         // En la entidad, totalPayment es String
         pago.setTotalPayment(montoSolicitado.toPlainString());
