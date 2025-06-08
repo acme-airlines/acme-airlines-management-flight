@@ -12,4 +12,6 @@ public interface IFlightService {
 
     List<FlightResponseDto> getAvailableFlights(FlightFilterRequestDTO filters) throws Exception;
 
+    void deleteFlightDontPay();
+
 }
