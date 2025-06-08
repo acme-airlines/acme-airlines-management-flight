@@ -13,4 +13,5 @@ public interface SeatFlightRepository extends JpaRepository<SeatFlightEntity, St
     List<SeatFlightEntity> findByCodeFlightFk_codeFlight(String codeFlightFk);
 
     Optional<SeatFlightEntity> findByCodeSeatFlight(String codeSeatFlight);
+
 }

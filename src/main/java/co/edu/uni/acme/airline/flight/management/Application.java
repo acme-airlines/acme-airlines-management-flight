@@ -8,11 +8,13 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(scanBasePackages = {"co.edu.uni.acme.aerolinea", "co.edu.uni.acme.airline"})
 @EntityScan("co.edu.uni.acme.aerolinea")
 @ComponentScan(basePackages = {"co.edu.uni.acme.aerolinea", "co.edu.uni.acme.airline"})
 @Import(ResourceServerConfig.class)
+@EnableScheduling
 public class Application {
 
 	public static void main(String[] args) {

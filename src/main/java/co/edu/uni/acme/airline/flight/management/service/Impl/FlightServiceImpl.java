@@ -8,6 +8,7 @@ import co.edu.uni.acme.aerolinea.commons.entity.FlightEntity;
 import co.edu.uni.acme.airline.flight.management.dto.FlightFilterRequestDTO;
 import co.edu.uni.acme.airline.flight.management.dto.FlightResponseDto;
 import co.edu.uni.acme.airline.flight.management.repository.FlightCityRepository;
+import co.edu.uni.acme.airline.flight.management.repository.FlightPassengerRepository;
 import co.edu.uni.acme.airline.flight.management.repository.FlightRepository;
 import co.edu.uni.acme.airline.flight.management.service.IFlightService;
 import co.edu.uni.acme.airline.flight.management.util.mapper.IFlightCityMapper;
@@ -33,6 +34,8 @@ public class FlightServiceImpl implements IFlightService {
     private final FlightCityRepository flightCityRepository;
 
     private final IFlightCityMapper flightCityMapper;
+
+    private final FlightPassengerRepository flightPassengerRepository;
 
     private final UserAuditService userAuditService;
 
@@ -68,6 +71,16 @@ public class FlightServiceImpl implements IFlightService {
         userAuditDto.setCodeUser(userDTO);
         userAuditService.saveAuditUser(userAuditDto);
         return responseDtos;
+    }
+
+    @Override
+    public void deleteFlightDontPay() {
+        List<Object[]> flightsDontPay=flightPassengerRepository.findFlightPassengerDontPay();
+        if(!flightsDontPay.isEmpty()){
+            for(Object[] object : flightsDontPay){
+                flightPassengerRepository.deleteFlightPassengerDontPay(object[1].toString(), object[0].toString());
+            }
+        }
     }
 
 }

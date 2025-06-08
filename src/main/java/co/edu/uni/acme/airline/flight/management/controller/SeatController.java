@@ -7,7 +7,6 @@ import co.edu.uni.acme.airline.flight.management.dto.SeatBookingRequestDto;
 import co.edu.uni.acme.airline.flight.management.service.ISeatService;
 import co.edu.uni.acme.airline.flight.management.service.Impl.SeatBookingService;
 import co.edu.uni.acme.airline.flight.management.service.Impl.SeatService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

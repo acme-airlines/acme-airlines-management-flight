@@ -44,7 +44,7 @@ public class SeatBookingService {
 
             SeatFlightEntity sf = optSeat.get();
 
-            if (!"available".equalsIgnoreCase(sf.getStatus())) {
+            if (!"available".equalsIgnoreCase(seatFlightRepo.findByCodeSeatFlight(dto.getCodeSeatFlight()).get().getStatus())) {
                 return new RespuestaDto("FAILED",
                         "Asiento no disponible: " + dto.getCodeSeatFlight());
             }
