@@ -1,5 +1,7 @@
 package co.edu.uni.acme.airline.flight.management.service.Impl;
 
+import co.edu.uni.acme.aerolinea.commons.dto.UserAuditDto;
+import co.edu.uni.acme.aerolinea.commons.dto.UserDTO;
 import co.edu.uni.acme.aerolinea.commons.entity.SeatFlightEntity;
 import co.edu.uni.acme.airline.flight.management.dto.RespuestaDto;
 import co.edu.uni.acme.airline.flight.management.dto.SeatBookingRequestDto;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class SeatBookingService {
 
     private final SeatFlightRepository seatFlightRepo;
+    private final UserAuditService userAuditService;
 
     /**
      * Procesa un listado de reservas de asiento. Por cada elemento en la lista:
@@ -48,8 +51,15 @@ public class SeatBookingService {
 
             sf.setStatus("reserved");
             seatFlightRepo.save(sf);
+
         }
 
+        UserAuditDto userAuditDto = new UserAuditDto();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setCodeUser("U001");
+        userAuditDto.setAction("INSERT INTO to seat_flight and SELECT to seat_flight");
+        userAuditDto.setCodeUser(userDTO);
+        userAuditService.saveAuditUser(userAuditDto);
         return new RespuestaDto("SUCCESS", "Todos los asientos reservados correctamente");
     }
 

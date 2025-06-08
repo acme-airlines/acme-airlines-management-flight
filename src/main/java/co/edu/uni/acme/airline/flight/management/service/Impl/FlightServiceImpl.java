@@ -2,6 +2,8 @@ package co.edu.uni.acme.airline.flight.management.service.Impl;
 
 import co.edu.uni.acme.aerolinea.commons.dto.FlightCityDTO;
 import co.edu.uni.acme.aerolinea.commons.dto.FlightDTO;
+import co.edu.uni.acme.aerolinea.commons.dto.UserAuditDto;
+import co.edu.uni.acme.aerolinea.commons.dto.UserDTO;
 import co.edu.uni.acme.aerolinea.commons.entity.FlightEntity;
 import co.edu.uni.acme.airline.flight.management.dto.FlightFilterRequestDTO;
 import co.edu.uni.acme.airline.flight.management.dto.FlightResponseDto;
@@ -32,6 +34,8 @@ public class FlightServiceImpl implements IFlightService {
 
     private final IFlightCityMapper flightCityMapper;
 
+    private final UserAuditService userAuditService;
+
     @Override
     public List<FlightResponseDto> getAvailableFlights(FlightFilterRequestDTO filters) throws Exception {
         if (filters.getStartDate() != null && filters.getStartDate().isBefore(LocalDate.now())) {
@@ -57,7 +61,12 @@ public class FlightServiceImpl implements IFlightService {
             flightResponse.setCodigoVuelo(flight.getCodeFlight());
             responseDtos.add(flightResponse);
         }
-
+        UserAuditDto userAuditDto = new UserAuditDto();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setCodeUser("U001");
+        userAuditDto.setAction("SELECT to flight, flight_city");
+        userAuditDto.setCodeUser(userDTO);
+        userAuditService.saveAuditUser(userAuditDto);
         return responseDtos;
     }
 

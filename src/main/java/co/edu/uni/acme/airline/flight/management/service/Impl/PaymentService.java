@@ -1,5 +1,7 @@
 package co.edu.uni.acme.airline.flight.management.service.Impl;
 
+import co.edu.uni.acme.aerolinea.commons.dto.UserAuditDto;
+import co.edu.uni.acme.aerolinea.commons.dto.UserDTO;
 import co.edu.uni.acme.aerolinea.commons.entity.*;
 import co.edu.uni.acme.airline.flight.management.dto.PaymentRequestDto;
 import co.edu.uni.acme.airline.flight.management.dto.PaymentResponseDto;
@@ -22,6 +24,7 @@ public class PaymentService {
     private final PaymentCardRepository cardRepo;
     private final PaymentRepository paymentRepo;
     private final PaymentFlightUserRepository paymentFlightUserRepository;
+    private final UserAuditService userAuditService;
 
     /**
      * 1) Busca la tarjeta por número.
@@ -87,10 +90,15 @@ public class PaymentService {
         pago.setDatePayment(LocalDate.now());
         pago.setCodePaymentFlightPassengerFk(pfUser);
         pago.setTimePayment(LocalTime.now());
-        // En la entidad, totalPayment es String
         pago.setTotalPayment(montoSolicitado.toPlainString());
-        // No asignamos ningún PaymentFlightUserEntity aquí (queda null)
         paymentRepo.save(pago);
+
+        UserAuditDto userAuditDto = new UserAuditDto();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setCodeUser("U001");
+        userAuditDto.setAction("INSERT INTO to payment, payment_card, payment_flight_user and SELECT to payment_card");
+        userAuditDto.setCodeUser(userDTO);
+        userAuditService.saveAuditUser(userAuditDto);
 
         return new PaymentResponseDto(nuevoCodigoPago, "APPROVED", "Pago procesado correctamente");
     }

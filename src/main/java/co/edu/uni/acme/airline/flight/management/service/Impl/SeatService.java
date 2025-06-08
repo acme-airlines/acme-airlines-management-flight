@@ -1,8 +1,6 @@
 package co.edu.uni.acme.airline.flight.management.service.Impl;
 
-import co.edu.uni.acme.aerolinea.commons.dto.FlightDTO;
-import co.edu.uni.acme.aerolinea.commons.dto.SeatDTO;
-import co.edu.uni.acme.aerolinea.commons.dto.SeatFlightDTO;
+import co.edu.uni.acme.aerolinea.commons.dto.*;
 import co.edu.uni.acme.aerolinea.commons.entity.SeatFlightEntity;
 import co.edu.uni.acme.airline.flight.management.dto.AssignSeatRequestDto;
 import co.edu.uni.acme.airline.flight.management.repository.SeatFlightRepository;
@@ -20,12 +18,20 @@ import java.util.stream.Collectors;
 public class SeatService implements ISeatService {
 
     private final SeatFlightRepository seatFlightRepo;
+    private final UserAuditService userAuditService;
 
     /**
      * Retorna la lista de SeatFlightDto (estado de asientos) para un vuelo dado.
      */
     public List<SeatFlightDTO> getSeatsByFlight(String flightCode) {
         List<SeatFlightEntity> entities = seatFlightRepo.findByCodeFlightFk_codeFlight(flightCode);
+
+        UserAuditDto userAuditDto = new UserAuditDto();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setCodeUser("U001");
+        userAuditDto.setAction("SELECT to seat_flight");
+        userAuditDto.setCodeUser(userDTO);
+        userAuditService.saveAuditUser(userAuditDto);
 
         return entities.stream()
                 .map(e -> {
